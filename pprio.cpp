@@ -64,6 +64,8 @@ int main(int argc, char* argv[])
     std::cout << "Monitoring '"<< processName << "'" << std::endl << std::endl;
     std::cout << "Target priority: " << prio << std::endl << std::endl;
 
+    std::cout << "PID   Status" << std::endl;
+
     HANDLE stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO screenBuffInfo;
     GetConsoleScreenBufferInfo(stdHandle, &screenBuffInfo);
