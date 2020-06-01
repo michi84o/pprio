@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     {
         std::cout << "You can specify a program name by using the command line parameter '-p'." << std::endl;
         std::cout << "For example:" << std::endl;
-        std::cout << "\tpprio -p Discord.exe" << std::endl << std::endl;
+        std::cout << "\tpprio -p Discord.exe" << std::endl;
         std::cout << "Since you didn't do that, what program do you like to monitor?" << std::endl;
 
         std::cin >> processName;
@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
             std::cout << "You did not input anything, please try again or press Ctrl+C to exit:" << std::endl;
             std::cin >> processName;
         }        
+        std::cout << std::endl;
     }
 
     if (abortProgram) return -1;
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
     if (boost) prioValue = HIGH_PRIORITY_CLASS;
 
 
-    std::cout << std::endl << "Monitoring '"<< processName << "'" << std::endl << std::endl;
+    std::cout << "Monitoring '"<< processName << "'" << std::endl << std::endl;
     std::cout << "Target priority: " << prio << std::endl << std::endl;
 
     HANDLE stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
