@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
                     std::cout << std::left << std::setw(6) << std::setfill(' ');
                     std::cout << pid;                    
 
-                    if (!SetPriorityClass(hProcess, ABOVE_NORMAL_PRIORITY_CLASS))
+                    if (!SetPriorityClass(hProcess, prioValue))
                     {
                         fail = true;
                         std::cout << "FAIL" << std::endl;                                    
