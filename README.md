@@ -8,4 +8,7 @@ Usage:
 
 pprio -p processName
 
+Additional priority options:
 Use the "-h" parameter to use "High" priority.
+Use the "-l" parameter to use "Lower" priority.
+Use the "-i" parameter to use "Idle" priority.

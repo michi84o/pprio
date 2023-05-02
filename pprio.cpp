@@ -16,9 +16,13 @@ int main(int argc, char* argv[])
     SetConsoleCtrlHandler(consoleHandler, TRUE);
 
     std::cout << "pprio - Process Priority Changer" << std::endl << std::endl;
+	std::cout << "Default priority: Above Normal" << std::endl;
+	std::cout << "Options: -h=High, -l=Below Normal, -i=Idle" << std::endl << std::endl;
 
     std::string processName = "";
     bool boost = false;
+	bool nerf = false;
+	bool idle = false;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -29,12 +33,20 @@ int main(int argc, char* argv[])
             {
                 processName = argv[i];
             }
-        }     
+        }
         else if (arg == "-h")
         {
             boost = true;
         }
-    }    
+		else if (arg == "-l")
+        {
+            nerf = true;
+        }
+		else if (arg == "-i")
+        {
+            idle = true;
+        }
+    }
 
     if (processName == "")
     {
@@ -49,7 +61,7 @@ int main(int argc, char* argv[])
         {
             std::cout << "You did not input anything, please try again or press Ctrl+C to exit:" << std::endl;
             std::cin >> processName;
-        }        
+        }
         std::cout << std::endl;
     }
 
@@ -57,9 +69,12 @@ int main(int argc, char* argv[])
 
     std::string prio = "Above normal";
     if (boost) prio = "High";
+    if (nerf) prio = "Lower";
+    if (idle) prio = "Idle";
     DWORD prioValue = ABOVE_NORMAL_PRIORITY_CLASS;
     if (boost) prioValue = HIGH_PRIORITY_CLASS;
-
+	if (boost) prioValue = BELOW_NORMAL_PRIORITY_CLASS;
+	if (idle) prioValue = IDLE_PRIORITY_CLASS;
 
     std::cout << "Monitoring '"<< processName << "'" << std::endl << std::endl;
     std::cout << "Target priority: " << prio << std::endl << std::endl;
@@ -77,7 +92,7 @@ int main(int argc, char* argv[])
 
     int lastLineCount = 0;
     while (!abortProgram)
-    {        
+    {
         bool fail = false;
         int lineCount = 0;
 
@@ -94,18 +109,18 @@ int main(int argc, char* argv[])
                 if (_wcsicmp(entry.szExeFile, pName.c_str()) == 0)
                 {
                     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
-                    
+
                     DWORD pid = GetProcessId(hProcess);
                     ++lineCount;
                     std::cout << std::left << std::setw(6) << std::setfill(' ');
-                    std::cout << pid;                    
+                    std::cout << pid;
 
                     if (!SetPriorityClass(hProcess, prioValue))
                     {
                         fail = true;
-                        std::cout << "FAIL" << std::endl;                                    
+                        std::cout << "FAIL" << std::endl;
                     }
-                    std::cout << "OK" << std::endl;                                        
+                    std::cout << "OK" << std::endl;
                     std::cout.copyfmt(coutState);
 
                     CloseHandle(hProcess);
@@ -114,7 +129,7 @@ int main(int argc, char* argv[])
         }
 
         CloseHandle(snapshot);
-                
+
         int currentLineCount = lineCount;
         while (currentLineCount++ < lastLineCount)
         {
@@ -123,7 +138,7 @@ int main(int argc, char* argv[])
         lastLineCount = lineCount;
 
         Sleep(5000);
-    }    
+    }
 
     return 0;
 }
@@ -142,7 +157,7 @@ BOOL WINAPI consoleHandler(DWORD signal) {
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
+// Tips for Getting Started:
 //   1. Use the Solution Explorer window to add/manage files
 //   2. Use the Team Explorer window to connect to source control
 //   3. Use the Output window to see build output and other messages
